@@ -10,6 +10,7 @@ import {
   canEditProject,
   canDeleteProject,
 } from "@/lib/permissions";
+import Navbar from "@/components/Navbar";
 
 type Project = {
   id: string;
@@ -133,6 +134,7 @@ export default function ProjectsPage() {
     <div className="min-h-screen bg-slate-50">
       {" "}
       <Toaster position="top-right" />
+      <Navbar  />
       {/* Header */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">

@@ -5,6 +5,7 @@ import { Users, Trash2, Shield, UserRound } from "lucide-react";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import { canManageMembers } from "@/lib/permissions";
+import Navbar from "@/components/Navbar";
 
 type Member = {
   id: string;
@@ -265,6 +266,8 @@ const canChangeMemberRole = (member: Member) => {
   };
 
   return (
+    <div>
+      <Navbar/>
     <main className="min-h-screen bg-gray-50 px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 flex items-center gap-4">
@@ -415,5 +418,6 @@ const canChangeMemberRole = (member: Member) => {
         </div>
       </div>
     </main>
+    </div>
   );
 }

@@ -27,6 +27,7 @@ type Task = {
 };
 
 import { canCreateTask, canEditTask, canDeleteTask } from "@/lib/permissions";
+import Navbar from "@/components/Navbar";
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -279,6 +280,7 @@ export default function TasksPage() {
     <div className="min-h-screen bg-slate-50">
       {" "}
       <Toaster position="top-right" />
+      <Navbar/>
       {/* Header */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
