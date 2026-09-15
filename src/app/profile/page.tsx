@@ -16,11 +16,20 @@ import api from "@/lib/api";
 import { formatRole } from "@/lib/permissions";
 import Navbar from "@/components/Navbar";
 
+// type UserData = {
+//   id: string;
+//   name: string;
+//   email: string;
+//   organization_id: string;
+//   role: string;
+// };
+
 type UserData = {
   id: string;
   name: string;
   email: string;
   organization_id: string;
+  organization_name: string;
   role: string;
 };
 
@@ -231,11 +240,11 @@ export default function ProfilePage() {
 
                 <div className="min-w-0">
                   <p className="text-xs text-slate-500">
-                    Organization ID
+                    Organization
                   </p>
 
                   <p className="mt-1 break-all text-xs font-semibold text-slate-900">
-                    {user.organization_id}
+                    {user.organization_name}
                   </p>
                 </div>
               </div>
