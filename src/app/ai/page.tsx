@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Bot, CheckCircle, Loader2 } from "lucide-react";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import api from "@/lib/api";
 import Navbar from "@/components/Navbar";
 
@@ -134,7 +134,6 @@ export default function AIPage() {
   return (
     <>
       {/* Page-level Sonner */}
-      <Toaster position="top-right" richColors />
 
         <Navbar />
       <main className="min-h-screen bg-slate-50 px-4 py-8">

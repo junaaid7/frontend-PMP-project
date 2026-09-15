@@ -9,7 +9,7 @@ import {
   Trash2,
   FolderKanban,
 } from "lucide-react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import api from "@/lib/api";
 
 type Project = {
@@ -279,7 +279,6 @@ export default function TasksPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {" "}
-      <Toaster position="top-right" />
       <Navbar/>
       {/* Header */}
       <div className="bg-white border-b border-slate-200">

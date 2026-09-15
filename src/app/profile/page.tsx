@@ -11,7 +11,7 @@ import {
   CalendarDays,
   KeyRound,
 } from "lucide-react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import api from "@/lib/api";
 import { formatRole } from "@/lib/permissions";
 import Navbar from "@/components/Navbar";
@@ -102,7 +102,6 @@ export default function ProfilePage() {
     <div>
       <Navbar />
     <div className="min-h-screen w-full overflow-x-hidden bg-slate-50">
-      <Toaster position="top-right" />
 
 
       <main className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-6 lg:px-10 xl:px-12 2xl:px-16">

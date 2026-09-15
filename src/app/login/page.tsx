@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import api from "@/lib/api";
 
 export default function LoginPage() {
@@ -70,7 +70,7 @@ try {
 
 };
 
-return ( <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 via-white to-blue-50/50 p-4"> <Toaster position="top-right" />
+return ( <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 via-white to-blue-50/50 p-4">
 
   <div className="w-full max-w-md bg-white rounded-2xl shadow-xl shadow-blue-100/50 border border-slate-200/60 p-8">
 

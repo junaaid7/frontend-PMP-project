@@ -13,6 +13,7 @@ type Member = {
   email: string;
   organization_id: string;
   role: string;
+  is_organization_owner: boolean;
 };
 
 const roles = ["owner", "admin", "manager", "developer", "viewer"];
@@ -25,30 +26,13 @@ export default function TeamPage() {
   const canManageTeam = canManageMembers(userRole);
   const [isRealOwner, setIsRealOwner] = useState(false);
 
-  const availableRoles =
-    userRole === "owner" ? roles : roles.filter((role) => role !== "owner");
+  const getAvailableRoles = () => {
+    if (userRole === "owner" && currentUserId) {
+      return roles;
+    }
 
-
-    const getAvailableRoles = (member: Member) => {
-  // Real owner can assign any role
-  if (userRole === "owner" && currentUserId) {
-    return [
-      "owner",
-      "admin",
-      "manager",
-      "developer",
-      "viewer",
-    ];
-  }
-
-  // Admin and secondary owner cannot assign Owner
-  return [
-    "admin",
-    "manager",
-    "developer",
-    "viewer",
-  ];
-};
+    return roles.filter((role) => role !== "owner");
+  };
 
   // const fetchCurrentUser = async () => {
   //   try {
@@ -87,38 +71,6 @@ export default function TeamPage() {
   //   fetchMembers();
   // }, []);
 
-
-
-  const fetchMembers = async () => {
-  try {
-    setLoading(true);
-
-    const response = await api.get("/organizations/members");
-
-    const data: Member[] = response.data;
-
-    setMembers(data);
-
-    const currentMember = data.find(
-      (member) => member.id === currentUserId
-    );
-
-    if (currentMember) {
-      setIsRealOwner(
-        currentMember.is_organization_owner
-      );
-    }
-  } catch (error: any) {
-    console.error("Failed to fetch members:", error);
-
-    toast.error(
-      error?.response?.data?.detail ||
-        "Failed to load team members."
-    );
-  } finally {
-    setLoading(false);
-  }
-};
 
 
 useEffect(() => {
@@ -312,7 +264,7 @@ const canChangeMemberRole = (member: Member) => {
                       Role
                     </th>
 
-                    {canManageMembers && (
+                    {canManageTeam && (
                       <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700">
                         Actions
                       </th>

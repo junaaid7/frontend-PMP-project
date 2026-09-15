@@ -20,7 +20,7 @@ import {
   canDeleteProject,
 } from "@/lib/permissions";
 
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import api from "@/lib/api";
 
 type Project = {
@@ -365,7 +365,6 @@ export default function ProjectDetailsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {" "}
-      <Toaster position="top-right" />
       {/* Header */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-5">
