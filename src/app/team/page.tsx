@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Users, Trash2, Shield, UserRound } from "lucide-react";
 import { toast } from "sonner";
+import { getApiErrorMessage } from "@/lib/api";
 import api from "@/lib/api";
 import { canManageMembers } from "@/lib/permissions";
 import Navbar from "@/components/Navbar";
@@ -100,15 +101,14 @@ useEffect(() => {
           currentMember.is_organization_owner
         );
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(
         "Failed to load team page:",
         error
       );
 
       toast.error(
-        error?.response?.data?.detail ||
-          "Failed to load team."
+        getApiErrorMessage(error, "Failed to load team.")
       );
     } finally {
       setLoading(false);
@@ -180,11 +180,11 @@ const canChangeMemberRole = (member: Member) => {
       );
 
       toast.success("Member role updated.");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to update role:", error);
 
       toast.error(
-        error?.response?.data?.detail || "Failed to update member role.",
+        getApiErrorMessage(error, "Failed to update member role."),
       );
     }
   };
@@ -206,10 +206,10 @@ const canChangeMemberRole = (member: Member) => {
       );
 
       toast.success("Member removed successfully.");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to remove member:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to remove member.");
+      toast.error(getApiErrorMessage(error, "Failed to remove member."));
     }
   };
 

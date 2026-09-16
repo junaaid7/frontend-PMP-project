@@ -12,6 +12,7 @@ import {
   KeyRound,
 } from "lucide-react";
 import { toast } from "sonner";
+import { getApiErrorStatus } from "@/lib/api";
 import api from "@/lib/api";
 import { formatRole } from "@/lib/permissions";
 import Navbar from "@/components/Navbar";
@@ -51,10 +52,10 @@ export default function ProfilePage() {
       try {
         const response = await api.get("/auth/me");
         setUser(response.data);
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Profile error:", error);
 
-        if (error?.response?.status === 401) {
+        if (getApiErrorStatus(error) === 401) {
           localStorage.removeItem("access_token");
           router.push("/login");
           return;

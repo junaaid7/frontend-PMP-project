@@ -12,6 +12,7 @@ Eye,
 EyeOff,
 } from "lucide-react";
 import { toast } from "sonner";
+import { getApiErrorMessage } from "@/lib/api";
 import api from "@/lib/api";
 
 export default function RegisterPage() {
@@ -91,10 +92,11 @@ try {
 
   // Go to login after successful registration
   router.push("/login");
-} catch (error: any) {
-  const message =
-    error?.response?.data?.detail ||
-    "Registration failed. Please try again.";
+} catch (error: unknown) {
+  const message = getApiErrorMessage(
+    error,
+    "Registration failed. Please try again.",
+  );
 
   toast.error(message);
 } finally {

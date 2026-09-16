@@ -14,4 +14,20 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+export function getApiErrorMessage(error, fallback) {
+  if (axios.isAxiosError(error)) {
+    const detail = error.response?.data?.detail;
+
+    if (typeof detail === "string") {
+      return detail;
+    }
+  }
+
+  return fallback;
+}
+
+export function getApiErrorStatus(error) {
+  return axios.isAxiosError(error) ? error.response?.status : undefined;
+}
+
 export default api;

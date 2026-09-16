@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
+import { getApiErrorMessage } from "@/lib/api";
 import api from "@/lib/api";
 
 export default function LoginPage() {
@@ -58,10 +59,11 @@ try {
 
   // Move user to dashboard
   router.push("/dashboard");
-} catch (error: any) {
-  const message =
-    error?.response?.data?.detail ||
-    "Login failed. Please try again.";
+} catch (error: unknown) {
+  const message = getApiErrorMessage(
+    error,
+    "Login failed. Please try again.",
+  );
 
   toast.error(message);
 } finally {

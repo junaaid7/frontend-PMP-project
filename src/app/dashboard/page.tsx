@@ -254,9 +254,11 @@ export default function DashboardPage() {
    * ---------------------------------------------------------
    */
   useEffect(() => {
-    fetchUser();
-    fetchProjects();
-    fetchStats();
+    const loadDashboard = async () => {
+      await Promise.all([fetchUser(), fetchProjects(), fetchStats()]);
+    };
+
+    void loadDashboard();
   }, []);
 
   /*
@@ -268,7 +270,11 @@ export default function DashboardPage() {
    * dashboard tasks are loaded again.
    */
   useEffect(() => {
-    fetchTasks();
+    const loadTasks = async () => {
+      await fetchTasks();
+    };
+
+    void loadTasks();
   }, [search, statusFilter, projectFilter, page]);
 
   /*

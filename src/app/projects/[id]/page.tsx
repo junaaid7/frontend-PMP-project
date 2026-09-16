@@ -21,6 +21,10 @@ import {
 } from "@/lib/permissions";
 
 import { toast } from "sonner";
+import {
+  getApiErrorMessage,
+  getApiErrorStatus,
+} from "@/lib/api";
 import api from "@/lib/api";
 
 type Project = {
@@ -77,15 +81,15 @@ export default function ProjectDetailsPage() {
       const response = await api.get(`/projects/${projectId}`);
 
       setProject(response.data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to fetch project:", error);
 
-      if (error?.response?.status === 404) {
+      if (getApiErrorStatus(error) === 404) {
         toast.error("Project not found");
-      } else if (error?.response?.status === 401) {
+      } else if (getApiErrorStatus(error) === 401) {
         toast.error("Please login again.");
       } else {
-        toast.error(error?.response?.data?.detail || "Failed to load project.");
+        toast.error(getApiErrorMessage(error, "Failed to load project."));
       }
     } finally {
       setLoading(false);
@@ -99,11 +103,11 @@ export default function ProjectDetailsPage() {
       const response = await api.get(`/tasks/project/${projectId}`);
 
       setTasks(response.data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to fetch project tasks:", error);
 
       toast.error(
-        error?.response?.data?.detail || "Failed to load project tasks.",
+        getApiErrorMessage(error, "Failed to load project tasks."),
       );
     } finally {
       setTasksLoading(false);
@@ -121,9 +125,15 @@ export default function ProjectDetailsPage() {
   };
 
   useEffect(() => {
-    fetchProject();
-    fetchProjectTasks();
-    fetchCurrentUser();
+    const loadPage = async () => {
+      await Promise.all([
+        fetchProject(),
+        fetchProjectTasks(),
+        fetchCurrentUser(),
+      ]);
+    };
+
+    void loadPage();
   }, [projectId]);
 
 
@@ -146,10 +156,10 @@ export default function ProjectDetailsPage() {
       toast.success("Project deleted successfully!");
 
       router.push("/projects");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to delete project:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to delete project.");
+      toast.error(getApiErrorMessage(error, "Failed to delete project."));
     } finally {
       setDeleting(false);
     }
@@ -184,10 +194,10 @@ export default function ProjectDetailsPage() {
       setShowTaskModal(false);
 
       toast.success("Task created successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to create task:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to create task.");
+      toast.error(getApiErrorMessage(error, "Failed to create task."));
     } finally {
       setCreatingTask(false);
     }
@@ -204,11 +214,11 @@ export default function ProjectDetailsPage() {
       );
 
       toast.success("Task status updated!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to update task status:", error);
 
       toast.error(
-        error?.response?.data?.detail || "Failed to update task status.",
+        getApiErrorMessage(error, "Failed to update task status."),
       );
     }
   };
@@ -261,10 +271,10 @@ export default function ProjectDetailsPage() {
       setEditTaskStatus("todo");
 
       toast.success("Task updated successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to update task:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to update task.");
+      toast.error(getApiErrorMessage(error, "Failed to update task."));
     } finally {
       setUpdatingTask(false);
     }
@@ -287,10 +297,10 @@ export default function ProjectDetailsPage() {
       );
 
       toast.success("Task deleted successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to delete task:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to delete task.");
+      toast.error(getApiErrorMessage(error, "Failed to delete task."));
     }
   };
 
@@ -306,18 +316,6 @@ export default function ProjectDetailsPage() {
     setEditTaskTitle("");
     setEditTaskDescription("");
     setEditTaskStatus("todo");
-  };
-
-  const getStatusLabel = (status: Task["status"]) => {
-    if (status === "in_progress") {
-      return "In Progress";
-    }
-
-    if (status === "done") {
-      return "Done";
-    }
-
-    return "Todo";
   };
 
   const getStatusClasses = (status: Task["status"]) => {

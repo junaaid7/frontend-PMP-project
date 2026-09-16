@@ -10,6 +10,7 @@ import {
   FolderKanban,
 } from "lucide-react";
 import { toast } from "sonner";
+import { getApiErrorMessage } from "@/lib/api";
 import api from "@/lib/api";
 
 type Project = {
@@ -59,10 +60,10 @@ export default function TasksPage() {
       if (response.data.length > 0 && !projectId) {
         setProjectId(response.data[0].id);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to fetch projects:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to load projects.");
+      toast.error(getApiErrorMessage(error, "Failed to load projects."));
     }
   };
 
@@ -73,10 +74,10 @@ export default function TasksPage() {
       const response = await api.get("/tasks/");
 
       setTasks(response.data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to fetch tasks:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to load tasks.");
+      toast.error(getApiErrorMessage(error, "Failed to load tasks."));
     } finally {
       setLoading(false);
     }
@@ -134,10 +135,10 @@ export default function TasksPage() {
       setShowCreateModal(false);
 
       toast.success("Task created successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to create task:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to create task.");
+      toast.error(getApiErrorMessage(error, "Failed to create task."));
     } finally {
       setCreating(false);
     }
@@ -160,10 +161,10 @@ export default function TasksPage() {
       );
 
       toast.success("Task deleted successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to delete task:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to delete task.");
+      toast.error(getApiErrorMessage(error, "Failed to delete task."));
     }
   };
 
@@ -178,11 +179,11 @@ export default function TasksPage() {
       );
 
       toast.success("Task status updated!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to update task status:", error);
 
       toast.error(
-        error?.response?.data?.detail || "Failed to update task status.",
+        getApiErrorMessage(error, "Failed to update task status."),
       );
     }
   };
@@ -235,10 +236,10 @@ export default function TasksPage() {
       setShowEditModal(false);
 
       toast.success("Task updated successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to update task:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to update task.");
+      toast.error(getApiErrorMessage(error, "Failed to update task."));
     } finally {
       setUpdating(false);
     }
@@ -262,18 +263,6 @@ export default function TasksPage() {
     const project = projects.find((item) => item.id === projectId);
 
     return project?.name || "Unknown Project";
-  };
-
-  const getStatusLabel = (status: Task["status"]) => {
-    if (status === "in_progress") {
-      return "In Progress";
-    }
-
-    if (status === "done") {
-      return "Done";
-    }
-
-    return "Todo";
   };
 
   return (

@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FolderKanban, Plus, X, Trash2, FileText } from "lucide-react";
 import { toast } from "sonner";
+import {
+  getApiErrorMessage,
+  getApiErrorStatus,
+} from "@/lib/api";
 import api from "@/lib/api";
 import {
   canCreateProject,
-  canEditProject,
   canDeleteProject,
 } from "@/lib/permissions";
 import Navbar from "@/components/Navbar";
@@ -37,17 +40,17 @@ export default function ProjectsPage() {
       const response = await api.get("/projects/");
 
       setProjects(response.data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to fetch projects:", error);
 
-      const statusCode = error?.response?.status;
+      const statusCode = getApiErrorStatus(error);
 
       if (statusCode === 401) {
         toast.error("Please login again.");
         return;
       }
 
-      toast.error(error?.response?.data?.detail || "Failed to load projects.");
+      toast.error(getApiErrorMessage(error, "Failed to load projects."));
     } finally {
       setLoading(false);
     }
@@ -64,8 +67,11 @@ export default function ProjectsPage() {
   };
 
   useEffect(() => {
-    fetchProjects();
-    fetchCurrentUser();
+    const loadPage = async () => {
+      await Promise.all([fetchProjects(), fetchCurrentUser()]);
+    };
+
+    void loadPage();
   }, []);
 
 
@@ -97,10 +103,10 @@ export default function ProjectsPage() {
       setShowCreateModal(false);
 
       toast.success("Project created successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to create project:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to create project.");
+      toast.error(getApiErrorMessage(error, "Failed to create project."));
     } finally {
       setCreating(false);
     }
@@ -123,10 +129,10 @@ export default function ProjectsPage() {
       );
 
       toast.success("Project deleted successfully!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Failed to delete project:", error);
 
-      toast.error(error?.response?.data?.detail || "Failed to delete project.");
+      toast.error(getApiErrorMessage(error, "Failed to delete project."));
     }
   };
 
